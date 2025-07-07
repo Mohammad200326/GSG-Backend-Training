@@ -7,7 +7,9 @@ const book1 = {
   },
   describe() {
     console.log(
-      `📖 ${this.title} by ${this.author} ${this.isRead ? "Read" : "Unread"}`
+      `📖 ${this.title} by ${this.author} ${
+        this.isRead ? "[Read]" : "[Unread]"
+      }`
     );
   },
 };
@@ -21,7 +23,9 @@ const book2 = {
   },
   describe() {
     console.log(
-      `📖 ${this.title} by ${this.author} ${this.isRead ? "Read" : "Unread"}`
+      `📖 ${this.title} by ${this.author} ${
+        this.isRead ? "[Read]" : "[Unread]"
+      }`
     );
   },
 };

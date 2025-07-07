@@ -8,7 +8,9 @@ function book(title, author, isRead) {
     },
     describe() {
       console.log(
-        `📖 ${this.title} by ${this.author} ${this.isRead ? "Read" : "Unread"}`
+        `📖 ${this.title} by ${this.author} ${
+          this.isRead ? "[Read]" : "[Unread]"
+        }`
       );
     },
   };
