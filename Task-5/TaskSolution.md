@@ -1,6 +1,6 @@
-# What is the Purpose of Each Module
+## What is the Purpose of Each Module
 
-## **HTTP**
+### **HTTP**
 
 - Contains both **client** and **server** implementations.
 - Supports features traditionally difficult to use, like large or chunk-encoded messages.
@@ -8,7 +8,7 @@
 
 ---
 
-## **HTTP/2**
+### **HTTP/2**
 
 - The Core API is **more symmetric** between client and server compared to the `http` API.
 - Many events (`error`, `connect`, `stream`) can be emitted on both client and server sides.
@@ -16,7 +16,7 @@
 
 ---
 
-## **HTTPS**
+### **HTTPS**
 
 - Implements **HTTP/1.1 over TLS/SSL** for encrypted communication.
 - Ensures **confidentiality** and **integrity** of data.
