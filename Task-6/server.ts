@@ -10,6 +10,9 @@ const server = http.createServer((req, res) => {
   } else if (req.method === "GET" && req.url === "/about") {
     res.statusCode = 200;
     res.end(JSON.stringify({ message: "This is the about route" }));
+  } else if (req.method === "GET" && req.url === "/dashboard") {
+    res.statusCode = 200;
+    res.end(JSON.stringify({ message: "This is the dashboard route" }));
   } else {
     res.statusCode = 404;
     res.end(JSON.stringify({ error: "Route not found" }));
