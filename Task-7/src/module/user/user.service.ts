@@ -20,6 +20,14 @@ class UserService {
   addCoach(coach: Omit<User, "id" | "createdAt" | "updatedAt">): User {
     return this.repository.create(coach);
   }
+
+  createUser(name: string, email: string, password: string): User {
+    return this.repository.create({ name, email, password, role: "USER" });
+  }
+
+  public findByEmail(email: string) {
+    return this.repository.findByEmail(email);
+  }
 }
 
 export const userService = new UserService();

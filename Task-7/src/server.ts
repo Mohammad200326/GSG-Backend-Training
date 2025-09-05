@@ -6,12 +6,8 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-// app.use("/", (req, res) => {
-//   console.log(req.body);
-//   res.send("ok");
-// });
 
-// app.use("api/v1/auth");
+app.use("/api/v1/auth", userRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/courses", userRouter);
 
