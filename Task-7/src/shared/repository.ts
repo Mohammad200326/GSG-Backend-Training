@@ -1,43 +1,42 @@
-import { v4 as uuid } from "uuid";
+export class GenericRepository<T extends { id: string }> {
+  private items: T[] = [];
 
-export class GenericRepository<
-  T extends { id: string; createdAt: Date; updatedAt: Date }
-> {
-  private items = new Map<string, T>();
+  constructor(initialData: T[] = []) {
+    this.items = initialData;
+  }
 
   findAll(): T[] {
-    return Array.from(this.items.values());
+    return this.items;
   }
 
   findById(id: string): T | undefined {
-    return this.items.get(id) || undefined;
+    return this.items.find((item) => item.id === id);
   }
 
-  create(item: Omit<T, "id" | "createdAt" | "updatedAt">): T {
-    const newItem: T = {
-      ...item,
-      id: uuid(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    } as T;
-
-    this.items.set(newItem.id, newItem);
+  create(payload: T): T {
+    const newItem = payload;
+    this.items.push(newItem);
     return newItem;
   }
 
-  update(id: string, updatedData: Partial<T>): T | null {
-    const isExist = this.items.get(id);
-    if (!isExist) return null;
+  update(id: string, payload: Partial<T>): T | null {
+    const index = this.items.findIndex((item) => item.id === id);
 
-    const updated: T = {
-      ...isExist,
-      ...updatedData,
-      updatedAt: new Date(),
+    if (index === -1) return null;
+
+    const updatedItem = {
+      ...this.items[index],
+      ...payload,
     } as T;
-    return updated;
+    this.items[index] = updatedItem;
+    return updatedItem;
   }
 
   delete(id: string): boolean {
-    return this.items.delete(id);
+    const index = this.items.findIndex((item) => item.id === id);
+    if (index === -1) return false;
+
+    this.items.splice(index, 1);
+    return true;
   }
 }

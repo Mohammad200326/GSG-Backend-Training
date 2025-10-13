@@ -1,8 +1,8 @@
-import type { Response } from "express";
-import type { ModuleNameType } from "./constant.js";
-import type { ErrorStatusCode } from "./util.types.js";
+import { Response } from "express";
+import { ModuleNameType } from "./constants";
+import { ErrorStatusCode } from "./util.types";
+
 export class CustomError extends Error {
-  public errorType = "custom";
   constructor(
     msg: string,
     public moduleName: ModuleNameType,
@@ -14,11 +14,11 @@ export class CustomError extends Error {
 
 export const handleError = (error: unknown, res: Response) => {
   if (error instanceof CustomError) {
-    console.log("customError", error);
-    res.status(error.statusCode).json({ message: error.message });
+    console.log("Custom Error:", error);
+    res.error({ statusCode: error.statusCode, message: error.message });
     return;
   }
-  console.log(`internal server error`, error);
-  //   we should alert ourself
-  res.status(500).json({ message: "internal server error" });
+  console.log("Internal Server Error:", error);
+
+  res.error({ statusCode: 500, message: "Internal Server Error" });
 };
