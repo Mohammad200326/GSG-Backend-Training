@@ -1,4 +1,5 @@
 import jwt, { SignOptions } from "jsonwebtoken";
+import { getEnvOrThrow } from "../../utils/util";
 
 export type JWT_PAYLOAD = {
   sub: string;
@@ -6,7 +7,9 @@ export type JWT_PAYLOAD = {
   role: "ADMIN" | "COACH" | "STUDENT";
 };
 
-const JWT_SECRET = "IAM_JWT_SECRET";
+const JWT_SECRET = getEnvOrThrow("JWT_SECRET");
+if (!process.env.JWT_SECRET) console.log("Hello");
+
 export const signJWT = (payload: JWT_PAYLOAD, options?: SignOptions) => {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: "15m" });
 };

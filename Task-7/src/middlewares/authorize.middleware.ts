@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { HTTPErrorStatus } from "../utils/util.types";
+import { RoleType } from "../users/types/constants";
 
 export const authorize =
-  (...allowedRoles: string[]) =>
+  (...allowedRoles: RoleType[]) =>
   (req: Request, res: Response, next: NextFunction) => {
     const user = req.user;
 

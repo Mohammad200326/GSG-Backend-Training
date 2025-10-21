@@ -11,7 +11,6 @@ import {
   updateUserDataDTOSchema,
 } from "./util/user.schema";
 import { User } from "./user.entity";
-import { CustomError, handleError } from "../utils/exception";
 import { HTTPErrorStatus } from "../utils/util.types";
 
 class UserController {
