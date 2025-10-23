@@ -1,3 +1,4 @@
+import { RoleType } from "../users/types/constants";
 import type { Course } from "./course.entity";
 import { CourseRepository } from "./course.repository";
 import {
@@ -34,7 +35,7 @@ class CourseService {
     id: string,
     data: UpdateCourseDTO,
     userId: string,
-    userRole: "ADMIN" | "COACH" | "STUDENT"
+    userRole: RoleType
   ): CourseDataDTO | null {
     const course = this.repository.findById(id);
     if (!course) throw new Error("Course not found");
@@ -45,11 +46,7 @@ class CourseService {
     return this.repository.update(id, data);
   }
 
-  deleteCourse(
-    id: string,
-    userId: string,
-    userRole: "ADMIN" | "COACH" | "STUDENT"
-  ): boolean {
+  deleteCourse(id: string, userId: string, userRole: RoleType): boolean {
     const course = this.repository.findById(id);
     if (!course) throw new Error("Course not found");
 

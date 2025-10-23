@@ -1,10 +1,11 @@
 import jwt, { SignOptions } from "jsonwebtoken";
 import { getEnvOrThrow } from "../../utils/util";
+import { RoleType } from "../../users/types/constants";
 
 export type JWT_PAYLOAD = {
   sub: string;
   name: string;
-  role: "ADMIN" | "COACH" | "STUDENT";
+  role: RoleType;
 };
 
 const JWT_SECRET = getEnvOrThrow("JWT_SECRET");
