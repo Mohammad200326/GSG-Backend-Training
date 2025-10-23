@@ -11,7 +11,7 @@ import { getEnvOrThrow } from "./utils/util";
 
 const api = "/api/v1";
 
-const app = express();
+export const app = express();
 
 app.use(express.json());
 app.use(responseEnhancer);
@@ -34,6 +34,8 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   handleError(error, res);
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}`);
+  });
+}
