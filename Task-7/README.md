@@ -154,3 +154,17 @@ Code must be:
 - ✨ Professional TypeScript
 
 🚫 Submissions that do not meet the above requirements will be considered **incomplete**.
+
+## 🚀 Run the Project
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Run all tests::
+
+```bash
+npm run test
+```
