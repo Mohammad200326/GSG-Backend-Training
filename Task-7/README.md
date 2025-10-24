@@ -163,7 +163,7 @@ Start the development server:
 npm run dev
 ```
 
-Run all tests::
+Run all tests:
 
 ```bash
 npm run test
