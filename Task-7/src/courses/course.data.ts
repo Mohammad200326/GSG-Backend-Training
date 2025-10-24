@@ -3,6 +3,6 @@ import { Course } from "./course.entity";
 import { createRandomCourse } from "../../seeds/course.seed";
 
 export const coursesData: Course[] = faker.helpers.multiple(
-  createRandomCourse,
+  () => createRandomCourse(),
   { count: 5 }
 );

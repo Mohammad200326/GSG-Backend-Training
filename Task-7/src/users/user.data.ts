@@ -1,4 +1,8 @@
+import { createRandomCoach, createRandomStudent } from "../../seeds/user.seed";
 import { User } from "./user.entity";
+
+const coachUser = createRandomCoach();
+const studentUser = createRandomStudent();
 
 export const usersData: User[] = [
   {
@@ -11,4 +15,6 @@ export const usersData: User[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+  coachUser,
+  studentUser,
 ];
