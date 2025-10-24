@@ -9,7 +9,6 @@ export type JWT_PAYLOAD = {
 };
 
 const JWT_SECRET = getEnvOrThrow("JWT_SECRET");
-if (!process.env.JWT_SECRET) console.log("Hello");
 
 export const signJWT = (payload: JWT_PAYLOAD, options?: SignOptions) => {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: "15m" });

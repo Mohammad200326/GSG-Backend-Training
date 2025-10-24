@@ -13,6 +13,7 @@ import {
 import { Course } from "./course.entity";
 import { CustomError, handleError } from "../utils/exception";
 import { HTTPErrorStatus } from "../utils/util.types";
+import { ZodError } from "zod";
 
 class CourseController {
   private service = courseService;
@@ -21,17 +22,30 @@ class CourseController {
     req: Request<{}, {}, CreateCourseDTO>,
     res: Response<CourseDataDTO>
   ) => {
-    const creatorId = req.user!.sub;
-    req.body.image = req.file ? `/uploads/${req.file.filename}` : undefined;
-    const validatedData = createCourseDTOSchema.parse(req.body);
-    const course = this.service.createCourse(validatedData, creatorId);
-    if (!course) {
-      res.error({
-        message: "Failed To Create Course",
+    try {
+      const creatorId = req.user!.sub;
+      req.body.image = req.file ? `/uploads/${req.file.filename}` : undefined;
+      const validatedData = createCourseDTOSchema.parse(req.body);
+      const course = this.service.createCourse(validatedData, creatorId);
+      if (!course) {
+        res.error({
+          message: "Failed To Create Course",
+          statusCode: HTTPErrorStatus.InternalServerError,
+        });
+      }
+      res.create(course);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.error({
+          statusCode: HTTPErrorStatus.BadRequest,
+          message: "Missing required fields",
+        });
+      }
+      return res.error({
+        message: "InternalServerError",
         statusCode: HTTPErrorStatus.InternalServerError,
       });
     }
-    res.create(course);
   };
 
   getCourses = (

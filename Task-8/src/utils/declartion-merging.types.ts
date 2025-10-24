@@ -3,6 +3,7 @@ import { UnifiedAPIErrorResponse } from "../middlewares/response.middleware";
 export type MyEnvs = {
   PORT: string;
   JWT_SECRET: string;
+  NODE_ENV: "development" | "production" | "test";
 };
 
 declare global {

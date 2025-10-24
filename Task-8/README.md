@@ -1,156 +1,108 @@
-# Task 7 : Mini Project: TypeScript Express (Module Architecture)
+# 🧪 Task 8: Testing – Course Module with Supertest & Jest
 
-🎯 Goal
+## 🎯 Goal
 
-Build a small Express API in TypeScript using a modular architecture with three modules: auth, user, and course and a Generic Repository Pattern.  
-The API must support JWT authentication, role-based access (ADMIN / COACH / STUDENT), user profile management, and course CRUD operations.  
-All data must be stored in in-memory JavaScript objects (reset on server restart).  
-Use Zod for DTO validation.
+Write automated tests for the **Course module** using **Supertest** and **Jest**, ensuring API correctness and reliability.
 
 ---
 
-## Note
+## ✅ Requirements
 
-Every time the server starts, there will be:
+### 1. Testing Framework
 
-admin@no.com
+- Use **Jest** as the testing framework.
+- Use **Supertest** for HTTP request testing.
 
-admin123
-ADMIN
+### 2. Helper File
+
+- Create a reusable helper file for Supertest setup (e.g., initializing the app, JWT token handling).
+
+### 3. Seed Data with Faker
+
+- Use **Faker.js** to generate mock users and courses for testing.
+- Ensure tests do not rely on static data but instead seed **dynamic test data**.
+
+### 4. Course Module Tests
+
+- Write tests for **at least 2 routes** in the Course module  
+  (minimum: `POST /courses` and another route of your choice).
+
+### 5. Branching
+
+- Create a new Git branch named **`course-tests`**.
+- Commit all test-related changes to this branch.
+- Create a Pull Request **without merging** with `main`.
 
 ---
 
-## Project Architecture
+## 📂 Suggested Folder Structure
 
-Organize the codebase into the following folder structure:
 src/
-├── auth/ # Authentication module (register, login, JWT)
-├── users/ # User module (profile read/update)
-├── courses/ # Course module (CRUD)
-├── shared/ # Common utils, middlewares, and error handling
-├── server.ts # App entry point
+├── tests/ # Test files
+│ ├── helpers/ # Supertest helper files
+│ └── courses.test.ts
+├── ...
+jest.config.js
 
 ---
 
-## Entities
+## 🧱 Test Scenarios for Course Module
 
-### User
+### 1. POST /courses
 
-```ts
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  role: "ADMIN" | "COACH" | "STUDENT";
-  createdAt: Date;
-  updatedAt: Date;
-}
+- ✅ **Success:** COACH or ADMIN can create a course with valid data.
+- ❌ **Forbidden:** STUDENT cannot create a course.
+- ❌ **Validation Error:** Missing required fields returns 400.
+
+### 2. GET /courses
+
+- ✅ **Success:** Returns a list of all courses (public).
+- ❌ **Edge:** Returns an empty array when no courses exist.
+
+### 3. GET /courses/:id
+
+- ✅ **Success:** Returns course details when ID is valid.
+- ❌ **Not Found:** Returns 404 for invalid course ID.
+
+### 4. PUT /courses/:id
+
+- ✅ **Success:** Course creator (COACH/ADMIN) updates a course successfully.
+- ❌ **Forbidden:** STUDENT cannot update courses.
+- ❌ **Not Owner:** COACH cannot update a course created by another COACH.
+
+### 5. DELETE /courses/:id
+
+- ✅ **Success:** Course creator (COACH/ADMIN) deletes a course successfully.
+- ❌ **Forbidden:** STUDENT cannot delete courses.
+- ❌ **Not Owner:** COACH cannot delete a course created by another COACH.
+
+---
+
+## 📌 Important Notes
+
+- Ensure **Zod validation errors** are tested.
+- Keep test code **clean**, **readable**, and **reusable** with helpers.
+- Final PR must include:
+  - ✅ Updated **README** with test running instructions (`npm run test`).
+
+---
+
+## 🧰 Running the Project & Tests
+
+Start the development server:
+
+```bash
+npm run dev
 ```
 
-interface Course {
-id: string;
-title: string;
-description: string;
-image?: string;
-createdAt: Date;
-updatedAt: Date;
-}
+Run all tests:
 
-## ✅ Features & Requirements
-
-### Authentication (/auth)
-
-- **POST** `/auth/register` → Register as a (default role).
-- **POST** `/auth/login` → Authenticate and issue JWT token.
-
-### Users (/users)
-
-- **GET** `/users/me` → Get current user profile (protected).
-- **PUT** `/users/me` → Update current profile.
-- **POST** `/users/coach` → Create a COACH user.
-
-### Courses (/courses)
-
-- **POST** `/courses` → Create a new course (**only COACH or ADMIN**)
-- **GET** `/courses` → Get all courses (public)
-- **GET** `/courses/:id` → Get course by ID (public)
-- **PUT** `/courses/:id` → Update course (**only the course creator, role: COACH or ADMIN**)
-- **DELETE** `/courses/:id` → Delete course (**only the course creator, role: COACH or ADMIN**)
-
----
-
-## 🎭 Roles & Permissions
-
-### ADMIN
-
-- Can create COACH users
-- Can update/delete any course
-
-### COACH
-
-- Can create/update/delete their own courses
-
-### STUDENT
-
-- Default role when registering
-- Can only view courses
-
----
-
-## 📦 Generic Repository Requirement
-
-You must implement a Generic Repository class in `shared/` that provides CRUD methods:
-
-```ts
-findAll()
-findById()
-create()
-update()
-delete()
+```bash
+npm run test
 ```
 
-This repository should use **TypeScript Generics** so it can be reused for both **Users** and **Courses**.
+## 🧩 Additional Note
 
-- Each module (**users, courses**) must extend or instantiate the repository to manage its in-memory data.
-- This enforces **clean architecture and code reuse**.
-
----
-
-## ⚠️ Error Handling
-
-- **400** → Validation errors
-- **401** → Unauthorized (no/invalid token)
-- **403** → Forbidden (wrong role)
-- **404** → Resource not found
-
-Includes:
-
-- Global error handler with **CustomError**
-- Fallback **404 middleware** for unknown routes
-
----
-
-## 📌 Important Notes for Students
-
-You must strictly follow all the above guidelines:
-
-- **Architecture**
-- **Modules**
-- **DTO validation**
-- **Repository pattern**
-- **Role-based access**
-- **Error handling**
-
-The project must be published with:
-
-- ✅ Clear setup instructions
-- ✅ Routes summary
-
-Code must be:
-
-- ✨ Clean
-- ✨ Well-formatted
-- ✨ Professional TypeScript
-
-🚫 Submissions that do not meet the above requirements will be considered **incomplete**.
+📝 **Task 8** was built as a **continuation of Task 7**.  
+Task 7 included the complete **TypeScript Express project structure** (without tests).  
+In Task 8, **automated testing** for the **Course module** was added using **Supertest** and **Jest**.
