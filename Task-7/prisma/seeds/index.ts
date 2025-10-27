@@ -3,6 +3,8 @@ import { adminSeed } from "./adminUser";
 import { usersSeed } from "./user.seed";
 
 const main = async () => {
+  await prisma.course.deleteMany();
+  await prisma.user.deleteMany();
   await adminSeed();
   await usersSeed();
 };

@@ -16,7 +16,8 @@ export const createRandomStudent = () => {
 
 export const createRandomCoach = () => {
   const createdAt = faker.date.past();
-  const randomCoach: Omit<User, "id"> = {
+  const randomCoach: User = {
+    id: faker.string.uuid(),
     email: faker.internet.email(),
     name: faker.person.fullName(),
     password: faker.internet.password(),

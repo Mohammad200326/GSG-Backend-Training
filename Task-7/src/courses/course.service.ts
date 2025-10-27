@@ -11,33 +11,33 @@ import {
 class CourseService {
   private repository = new CourseRepository();
 
-  createCourse(data: CreateCourseDTO, userId: string): CourseDataDTO {
-    const course: Omit<Course, "id"> = {
+  getCourses(): Promise<CoursesDataDTO> {
+    return this.repository.findAll();
+  }
+
+  getCourseById(id: string): Promise<CourseDataDTO | undefined> {
+    return this.repository.findById(id);
+  }
+
+  async createCourse(
+    data: Pick<Course, "title" | "description" | "image">,
+    userId: string
+  ): Promise<CourseDataDTO> {
+    return await this.repository.create({
       title: data.title,
       description: data.description,
       image: data.image,
       creatorId: userId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    return this.repository.create(course as Course);
+    });
   }
 
-  getCourses(): CoursesDataDTO {
-    return this.repository.findAll();
-  }
-
-  getCourseById(id: string): CourseDataDTO | undefined {
-    return this.repository.findById(id);
-  }
-
-  updateCourse(
+  async updateCourse(
     id: string,
     data: UpdateCourseDTO,
     userId: string,
     userRole: RoleType
-  ): CourseDataDTO | null {
-    const course = this.repository.findById(id);
+  ): Promise<CourseDataDTO | null> {
+    const course = await this.repository.findById(id);
     if (!course) throw new Error("Course not found");
 
     if (course.creatorId !== userId && userRole !== "ADMIN") {
@@ -46,14 +46,18 @@ class CourseService {
     return this.repository.update(id, data);
   }
 
-  deleteCourse(id: string, userId: string, userRole: RoleType): boolean {
-    const course = this.repository.findById(id);
+  async deleteCourse(
+    id: string,
+    userId: string,
+    userRole: RoleType
+  ): Promise<Course | null> {
+    const course = await this.repository.findById(id);
     if (!course) throw new Error("Course not found");
 
     if (course.creatorId !== userId && userRole !== "ADMIN") {
       throw new Error("Not allowed to delete this course");
     }
-    return this.repository.delete(id);
+    return await this.repository.delete(id);
   }
 }
 

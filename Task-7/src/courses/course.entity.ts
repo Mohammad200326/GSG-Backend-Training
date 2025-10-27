@@ -1,9 +1,3 @@
-export interface Course {
-  id: string;
-  title: string;
-  description: string;
-  image?: string | undefined;
-  creatorId: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { Course as PrismaCourse } from "../generated/prisma/client";
+
+export type Course = PrismaCourse;
