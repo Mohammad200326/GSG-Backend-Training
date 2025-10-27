@@ -30,7 +30,7 @@ class AuthService {
   }
 
   async login(payload: LoginDTO): Promise<LoginDTOResponse | null> {
-    const foundUser = this._userService.findUserByEmail(payload.email);
+    const foundUser = await this._userService.findUserByEmail(payload.email);
     if (!foundUser) return null;
     const isPasswordMatch = await verifyArgonHash(
       payload.password,

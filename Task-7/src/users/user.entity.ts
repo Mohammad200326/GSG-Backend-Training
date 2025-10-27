@@ -1,11 +1,3 @@
-import { RoleType } from "./types/constants";
+import { User as PrismaUser } from "../generated/prisma/client";
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  role: RoleType;
-  createdAt: Date;
-  updatedAt: Date;
-}
+export type User = PrismaUser;

@@ -1,17 +1,38 @@
-import { GenericRepository } from "../shared/repository";
-import type { Course } from "./course.entity";
+import { prisma } from "../services/prisma.service";
+import { Course } from "./course.entity";
 
-export class CourseRepository extends GenericRepository<Course> {
-  private idCounter = 1;
+export class CourseRepository {
+  private prismaCourse = prisma.course;
 
-  create(course: Course): Course {
-    course.id = this.idCounter.toString();
-    this.idCounter++;
-    return super.create(course);
+  findAll(): Promise<Course[]> {
+    return this.prismaCourse.findMany();
   }
 
-  update(id: string, payload: Partial<Course>): Course | null {
-    payload.updatedAt = new Date();
-    return super.update(id, payload);
+  findById(id: string): Promise<Course | undefined> {
+    return this.prismaCourse.findUniqueOrThrow({ where: { id } });
+  }
+
+  create(
+    data: Pick<Course, "title" | "description" | "image" | "creatorId">
+  ): Promise<Course> {
+    return this.prismaCourse.create({ data });
+  }
+
+  update(
+    id: string,
+    data: Partial<Pick<Course, "title" | "description" | "image">>
+  ): Promise<Course | null> {
+    return this.prismaCourse.update({
+      where: { id },
+      data: {
+        title: data.title,
+        description: data.description,
+        image: data.image,
+      },
+    });
+  }
+
+  delete(id: string): Promise<Course | null> {
+    return this.prismaCourse.delete({ where: { id } });
   }
 }
