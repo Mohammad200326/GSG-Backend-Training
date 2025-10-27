@@ -9,18 +9,18 @@ import { UserRepository } from "./user.repository";
 class UserService {
   private repository = new UserRepository();
 
-  getUserById(id: string): UserDataResponseDTO | undefined {
+  getUserById(id: string): Promise<UserDataResponseDTO | undefined> {
     return this.repository.findById(id);
   }
 
   updateUser(
     id: string,
     payload: UpdateUserDataDTO
-  ): UserDataResponseDTO | null {
+  ): Promise<UserDataResponseDTO | null> {
     return this.repository.update(id, payload);
   }
 
-  createCoach(data: CreateUserDTO): UserDataResponseDTO {
+  createCoach(data: CreateUserDTO): Promise<UserDataResponseDTO> {
     const coach: Omit<User, "id"> = {
       name: data.name,
       email: data.email,
@@ -32,7 +32,7 @@ class UserService {
     return this.repository.create(coach as User);
   }
 
-  createStudent(data: CreateUserDTO): UserDataResponseDTO {
+  createStudent(data: CreateUserDTO): Promise<UserDataResponseDTO> {
     const student: Omit<User, "id"> = {
       name: data.name,
       email: data.email,
@@ -44,7 +44,7 @@ class UserService {
     return this.repository.create(student as User);
   }
 
-  findUserByEmail(email: string): User | undefined {
+  findUserByEmail(email: string): Promise<User | undefined> {
     return this.repository.findByEmail(email);
   }
 }

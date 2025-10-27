@@ -11,20 +11,26 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@faker-js/faker": "^9.9.0",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.7.0",
+    "prisma": "^6.18.0",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.0.2",
+    "@prisma/client": "^6.18.0",
     "argon2": "^0.44.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
     "zod": "^4.1.12"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seeds"
   }
 }
