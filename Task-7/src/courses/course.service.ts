@@ -3,7 +3,6 @@ import type { Course } from "./course.entity";
 import { CourseRepository } from "./course.repository";
 import {
   CourseDataDTO,
-  CoursesDataDTO,
   CreateCourseDTO,
   UpdateCourseDTO,
 } from "./types/course.dto";
@@ -11,43 +10,48 @@ import {
 class CourseService {
   private repository = new CourseRepository();
 
-  createCourse(data: CreateCourseDTO, userId: string): CourseDataDTO {
-    const course: Omit<Course, "id"> = {
+  createCourse(data: CreateCourseDTO, userId: string): Promise<CourseDataDTO> {
+    const course: Omit<Course, "id" | "createdAt" | "updatedAt"> = {
       title: data.title,
       description: data.description,
       image: data.image,
       creatorId: userId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     };
     return this.repository.create(course as Course);
   }
 
-  getCourses(): CoursesDataDTO {
-    return this.repository.findAll();
+  getCourses(
+    page = 1,
+    limit = 10
+  ): Promise<{ courses: CourseDataDTO[]; totalRecords: number }> {
+    return this.repository.findAll(page, limit);
   }
 
-  getCourseById(id: string): CourseDataDTO | undefined {
+  getCourseById(id: string): Promise<CourseDataDTO | null> {
     return this.repository.findById(id);
   }
 
-  updateCourse(
+  async updateCourse(
     id: string,
     data: UpdateCourseDTO,
     userId: string,
     userRole: RoleType
-  ): CourseDataDTO | null {
-    const course = this.repository.findById(id);
+  ): Promise<CourseDataDTO | null> {
+    const course = await this.repository.findById(id);
     if (!course) throw new Error("Course not found");
 
-    if (course.creatorId !== userId && userRole !== "ADMIN") {
+    if (course.creatorId.toString() !== userId && userRole !== "ADMIN") {
       throw new Error("Not allowed to update this course");
     }
     return this.repository.update(id, data);
   }
 
-  deleteCourse(id: string, userId: string, userRole: RoleType): boolean {
-    const course = this.repository.findById(id);
+  async deleteCourse(
+    id: string,
+    userId: string,
+    userRole: RoleType
+  ): Promise<Course | null> {
+    const course = await this.repository.findById(id);
     if (!course) throw new Error("Course not found");
 
     if (course.creatorId !== userId && userRole !== "ADMIN") {

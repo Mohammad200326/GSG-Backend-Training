@@ -8,6 +8,7 @@ import path from "node:path";
 import { handleError } from "./utils/exception";
 import { responseEnhancer } from "./middlewares/response.middleware";
 import { getEnvOrThrow } from "./utils/util";
+import "./services/mongoose.service";
 
 const api = "/api/v1";
 

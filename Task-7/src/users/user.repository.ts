@@ -1,38 +1,42 @@
-import { GenericRepository } from "../shared/repository";
 import { User } from "./user.entity";
+import { UserModel } from "./user.model";
 
-export class UserRepository extends GenericRepository<User> {
-  constructor() {
-    const initialUsers: User[] = [
-      {
-        id: "1",
-        email: "admin@no.com",
-        password:
-          "$argon2id$v=19$m=65536,t=3,p=4$W+pjwEx9/oDlAfkF+RE38g$G2XLeTsWSm18VJ0BVfE78WGQ4HRm4kHOvAs/uMva3OE",
-        role: "ADMIN",
-        name: "Admin",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ];
+class UserRepository {
+  findAll(page: number, limit: number) {
+    const users = UserModel.find()
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .exec();
 
-    super(initialUsers);
+    const totalRecords = UserModel.countDocuments().exec();
+
+    return { users, totalRecords };
   }
 
-  private idCounter = 2;
-
-  create(user: User): User {
-    user.id = this.idCounter.toString();
-    this.idCounter++;
-    return super.create(user);
+  findById(id: string): Promise<User | null> {
+    return UserModel.findById(id).exec();
   }
 
-  update(id: string, payload: Partial<User>): User | null {
-    payload.updatedAt = new Date();
-    return super.update(id, payload);
+  create(
+    data: Pick<User, "name" | "email" | "password" | "role">
+  ): Promise<User> {
+    return UserModel.create(data);
   }
 
-  findByEmail(email: string): User | undefined {
-    return this.findAll().find((user) => user.email === email);
+  update(
+    id: string,
+    data: Partial<Pick<User, "name" | "email" | "password">>
+  ): Promise<User | null> {
+    return UserModel.findByIdAndUpdate(id, data, { new: true }).exec();
+  }
+
+  delete(id: string): Promise<User | null> {
+    return UserModel.findByIdAndDelete(id);
+  }
+
+  findByEmail(email: string) {
+    return UserModel.findOne({ email }).exec();
   }
 }
+
+export const userRepository = new UserRepository();

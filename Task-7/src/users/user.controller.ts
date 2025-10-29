@@ -17,9 +17,9 @@ class UserController {
   private service = userService;
   private _authService = authService;
 
-  getUserById = (req: Request, res: Response<UserDataResponseDTO>) => {
+  getUserById = async (req: Request, res: Response<UserDataResponseDTO>) => {
     const id = req.user!.sub;
-    const user = this.service.getUserById(id);
+    const user = await this.service.getUserById(id);
     if (!user) {
       res.error({
         message: "User Not Found!",
@@ -30,13 +30,16 @@ class UserController {
     return res.ok(user);
   };
 
-  updateUser = (
+  updateUser = async (
     req: Request<{}, {}, UpdateUserDataDTO>,
     res: Response<UserDataResponseDTO>
   ) => {
     const id = req.user!.sub;
     const validatedData = updateUserDataDTOSchema.parse(req.body);
-    const user = this.service.updateUser(id, validatedData as Partial<User>);
+    const user = await this.service.updateUser(
+      id,
+      validatedData as Partial<User>
+    );
     if (!user) {
       res.error({
         message: "User Not Found!",
@@ -47,10 +50,10 @@ class UserController {
     return res.ok(user);
   };
 
-  async createCoach(
+  createCoach = async (
     req: Request<{}, {}, CreateUserDTO>,
     res: Response<UserDataResponseDTO>
-  ) {
+  ) => {
     try {
       const validatedData = createUserDTOSchema.parse(req.body);
       const coach = await this._authService.createCoachByAdmin(validatedData);
@@ -61,7 +64,7 @@ class UserController {
         statusCode: HTTPErrorStatus.InternalServerError,
       });
     }
-  }
+  };
 }
 
 export const userController = new UserController();
