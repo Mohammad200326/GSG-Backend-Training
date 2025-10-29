@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
 import { User } from "./user.entity";
 import { ROLES } from "./types/constants";
+import { schemaToJsonDefaultOption } from "../services/mongoose.service";
 
 const userSchema = new Schema<User>(
   {
@@ -14,7 +15,7 @@ const userSchema = new Schema<User>(
       default: ROLES.student,
     },
   },
-  { timestamps: true, versionKey: false }
+  { timestamps: true, versionKey: false, toJSON: schemaToJsonDefaultOption }
 );
 
 export const UserModel = model<User>("User", userSchema);

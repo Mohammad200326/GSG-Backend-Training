@@ -7,6 +7,7 @@ export class CourseRepository {
     const courses = await CourseModel.find()
       .skip((page - 1) * limit)
       .limit(limit)
+      .populate("creatorId")
       .exec();
 
     const totalRecords = await CourseModel.countDocuments().exec();
@@ -15,7 +16,7 @@ export class CourseRepository {
   }
 
   findById(id: string): Promise<Course | null> {
-    return CourseModel.findById(id).exec();
+    return CourseModel.findById(id).populate("creatorId").exec();
   }
 
   create(

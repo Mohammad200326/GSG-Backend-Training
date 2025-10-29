@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 import { Course } from "./course.entity";
+import { schemaToJsonDefaultOption } from "../services/mongoose.service";
 
 const courseSchema = new Schema<Course>(
   {
@@ -8,11 +9,11 @@ const courseSchema = new Schema<Course>(
     image: { type: String, required: false },
     creatorId: {
       type: "ObjectId",
-      ref: "Course",
+      ref: "User",
       required: true,
     },
   },
-  { timestamps: true, versionKey: false }
+  { timestamps: true, versionKey: false, toJSON: schemaToJsonDefaultOption }
 );
 
 export const CourseModel = model<Course>("Course", courseSchema);
