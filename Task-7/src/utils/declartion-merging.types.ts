@@ -3,6 +3,7 @@ import { UnifiedAPIErrorResponse } from "../middlewares/response.middleware";
 export type MyEnvs = {
   PORT: string;
   JWT_SECRET: string;
+  MONGO_URI: string;
 };
 
 declare global {

@@ -10,10 +10,6 @@ router.get("/me", userController.getUserById);
 
 router.put("/me", userController.updateUser);
 
-router.post(
-  "/coach",
-  authorize("ADMIN"),
-  userController.createCoach.bind(userController)
-);
+router.post("/coach", authorize("ADMIN"), userController.createCoach);
 
 export const userRouter = router;
