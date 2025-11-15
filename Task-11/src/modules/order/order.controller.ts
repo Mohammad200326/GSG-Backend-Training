@@ -16,13 +16,15 @@ import type {
   CreateOrderReturnDTO,
   OrderOverviewResponseDTO,
   OrderResponseDTO,
-  UpdateOrderDto,
+  UpdateOrderDTO,
+  UpdateReturnDTO,
 } from './types/order.dto';
 import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
 import {
   createOrderDTOValidationSchema,
   createReturnDTOValidationSchema,
-  updateOrderStatusSchema,
+  updateOrderDTOSchema,
+  updateReturnDTOSchema,
 } from './util/order.validation.schema';
 import { paginationSchema } from 'src/utils/api.util';
 import type {
@@ -67,8 +69,8 @@ export class OrderController {
   @Roles(['ADMIN'])
   update(
     @Param('id') id: string,
-    @Body(new ZodValidationPipe(updateOrderStatusSchema))
-    updateOrderDTO: UpdateOrderDto,
+    @Body(new ZodValidationPipe(updateOrderDTOSchema))
+    updateOrderDTO: UpdateOrderDTO,
   ): Promise<OrderResponseDTO> {
     return this.orderService.update(+id, updateOrderDTO);
   }
@@ -86,5 +88,15 @@ export class OrderController {
       createReturnDto,
       BigInt(request.user!.id),
     );
+  }
+
+  @Patch('return/:id')
+  @Roles(['ADMIN'])
+  updateReturn(
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(updateReturnDTOSchema))
+    updateReturnDTO: UpdateReturnDTO,
+  ): Promise<OrderResponseDTO> {
+    return this.orderService.updateReturn(+id, updateReturnDTO);
   }
 }

@@ -3,7 +3,8 @@ import type {
   CreateOrderDTO,
   CreateOrderReturnDTO,
   OrderOverviewResponseDTO,
-  UpdateOrderDto,
+  UpdateOrderDTO,
+  UpdateReturnDTO,
 } from './types/order.dto';
 import { DatabaseService } from '../database/database.service';
 import { MoneyUtil } from 'src/utils/money.util';
@@ -112,7 +113,7 @@ export class OrderService {
     });
   }
 
-  update(id: number, updateOrderDto: UpdateOrderDto) {
+  update(id: number, updateOrderDto: UpdateOrderDTO) {
     return this.prismaService.order.update({
       where: { id },
       data: { orderStatus: updateOrderDto.orderStatus },
@@ -205,5 +206,27 @@ export class OrderService {
     });
 
     return this.findOne(createReturnDto.orderId, userId);
+  }
+
+  async updateReturn(id: number, updateReturnDTO: UpdateReturnDTO) {
+    return this.prismaService.$transaction(async (prismaTX) => {
+      await prismaTX.orderReturn.update({
+        where: { id },
+        data: { status: updateReturnDTO.returnStatus },
+      });
+
+      const order = await prismaTX.order.findUniqueOrThrow({
+        where: { id: id },
+        include: {
+          orderProducts: { include: { product: true } },
+          transactions: true,
+          orderReturns: {
+            include: { returnedItems: { include: { product: true } } },
+          },
+        },
+      });
+
+      return order;
+    });
   }
 }
