@@ -3,6 +3,7 @@ import type {
   CreateOrderDTO,
   CreateOrderReturnDTO,
   OrderOverviewResponseDTO,
+  UpdateOrderDto,
 } from './types/order.dto';
 import { DatabaseService } from '../database/database.service';
 import { MoneyUtil } from 'src/utils/money.util';
@@ -111,9 +112,19 @@ export class OrderService {
     });
   }
 
-  // update(id: number, updateOrderDto: UpdateOrderDto) {
-  //   return `This action updates a #${id} order`;
-  // }
+  update(id: number, updateOrderDto: UpdateOrderDto) {
+    return this.prismaService.order.update({
+      where: { id },
+      data: { orderStatus: updateOrderDto.orderStatus },
+      include: {
+        orderProducts: { include: { product: true } },
+        transactions: true,
+        orderReturns: {
+          include: { returnedItems: { include: { product: true } } },
+        },
+      },
+    });
+  }
 
   remove(id: number) {
     return `This action removes a #${id} order`;
