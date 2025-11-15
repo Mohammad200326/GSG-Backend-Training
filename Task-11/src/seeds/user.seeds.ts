@@ -19,3 +19,11 @@ export const getMerchantUser = async () =>
     password: await argon.hash('1234567'),
     role: 'MERCHANT',
   }) as const;
+
+export const getAdminUser = async () =>
+  ({
+    name: 'Admin',
+    email: 'admin@admin.com',
+    password: await argon.hash('admin123'),
+    role: 'ADMIN',
+  }) as const;
