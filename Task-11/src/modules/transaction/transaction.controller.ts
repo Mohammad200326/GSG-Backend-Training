@@ -1,11 +1,11 @@
 import {
   Controller,
-  // Get,
+  Get,
   Post,
   Body,
   Req,
   // Patch,
-  // Param,
+  Param,
   // Delete,
 } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
@@ -31,10 +31,10 @@ export class TransactionController {
   //   return this.transactionService.findAll();
   // }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.transactionService.findOne(+id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.transactionService.findOne(+id);
+  }
 
   // @Patch(':id')
   // update(

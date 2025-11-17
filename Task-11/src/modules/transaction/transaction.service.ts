@@ -22,13 +22,11 @@ export class TransactionService {
   //   return `This action returns all transaction`;
   // }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} transaction`;
-  // }
-
-  // update(id: number, updateTransactionDto: UpdateTransactionDto) {
-  //   return `This action updates a #${id} transaction`;
-  // }
+  findOne(id: number) {
+    return this.prismaService.userTransaction.findUnique({
+      where: { id },
+    });
+  }
 
   // findByOrderId(orderId: number) {
   //   return `This action returns transaction for order #${orderId}`;
