@@ -26,26 +26,23 @@ export class TransactionController {
     return this.transactionService.create(createTransactionDto, request.user);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.transactionService.findAll();
-  // }
+  @Get()
+  findAll() {
+    return this.transactionService.findAll();
+  }
+
+  @Get('user')
+  findByUserId(@Req() request: Express.Request) {
+    return this.transactionService.findByUserId(request.user);
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.transactionService.findOne(+id);
   }
 
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateTransactionDto: UpdateTransactionDto,
-  // ) {
-  //   return this.transactionService.update(+id, updateTransactionDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.transactionService.remove(+id);
-  // }
+  @Get('order/:orderId')
+  findByOrderId(@Param('orderId') orderId: string) {
+    return this.transactionService.findByOrderId(+orderId);
+  }
 }

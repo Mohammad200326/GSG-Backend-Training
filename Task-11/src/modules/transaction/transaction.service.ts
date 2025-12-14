@@ -18,9 +18,9 @@ export class TransactionService {
     });
   }
 
-  // findAll() {
-  //   return `This action returns all transaction`;
-  // }
+  findAll() {
+    return this.prismaService.userTransaction.findMany({});
+  }
 
   findOne(id: number) {
     return this.prismaService.userTransaction.findUnique({
@@ -28,11 +28,15 @@ export class TransactionService {
     });
   }
 
-  // findByOrderId(orderId: number) {
-  //   return `This action returns transaction for order #${orderId}`;
-  // }
+  findByUserId(user: Express.Request['user']) {
+    return this.prismaService.userTransaction.findMany({
+      where: { userId: Number(user!.id) },
+    });
+  }
 
-  // findByUserId(userId: number) {
-  //   return `This action returns transactions for user #${userId}`;
-  // }
+  findByOrderId(orderId: number) {
+    return this.prismaService.userTransaction.findMany({
+      where: { orderId },
+    });
+  }
 }
