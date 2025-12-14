@@ -6,12 +6,21 @@ import {
   Req,
   // Patch,
   Param,
+  Query,
   // Delete,
 } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
-import type { CreateTransactionDto } from './types/transactions.dto';
+import type {
+  CreateTransactionDto,
+  TransactionResponseDTO,
+} from './types/transactions.dto';
 import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
 import { CreateTransactionDTOValidationSchema } from './util/transaction.validation.schema';
+import { paginationSchema } from 'src/utils/api.util';
+import type {
+  PaginatedResult,
+  PaginationQueryType,
+} from 'src/types/util.types';
 
 @Controller('transaction')
 export class TransactionController {
@@ -27,13 +36,20 @@ export class TransactionController {
   }
 
   @Get()
-  findAll() {
-    return this.transactionService.findAll();
+  findAll(
+    @Query(new ZodValidationPipe(paginationSchema))
+    query: PaginationQueryType,
+  ): Promise<PaginatedResult<TransactionResponseDTO>> {
+    return this.transactionService.findAll(query);
   }
 
   @Get('user')
-  findByUserId(@Req() request: Express.Request) {
-    return this.transactionService.findByUserId(request.user);
+  findByUserId(
+    @Req() request: Express.Request,
+    @Query(new ZodValidationPipe(paginationSchema))
+    query: PaginationQueryType,
+  ) {
+    return this.transactionService.findByUserId(request.user, query);
   }
 
   @Get(':id')
