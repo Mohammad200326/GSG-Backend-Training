@@ -21,6 +21,7 @@ import type {
   PaginatedResult,
   PaginationQueryType,
 } from 'src/types/util.types';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @Controller('transaction')
 export class TransactionController {
@@ -36,6 +37,7 @@ export class TransactionController {
   }
 
   @Get()
+  @Roles(['ADMIN'])
   findAll(
     @Query(new ZodValidationPipe(paginationSchema))
     query: PaginationQueryType,

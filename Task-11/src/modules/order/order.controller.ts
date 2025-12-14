@@ -47,6 +47,15 @@ export class OrderController {
     return this.orderService.create(createOrderDto, BigInt(request.user!.id));
   }
 
+  @Get('all')
+  @Roles(['ADMIN'])
+  findAllForAdmin(
+    @Query(new ZodValidationPipe(paginationSchema))
+    query: PaginationQueryType,
+  ): Promise<PaginatedResult<OrderOverviewResponseDTO>> {
+    return this.orderService.findAllForAdmin(query);
+  }
+
   @Get()
   findAll(
     @Req() request: Express.Request,

@@ -13,11 +13,13 @@ import type { UpdateUserDTO } from './dto/user.dto';
 import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
 import { updateUserValidationSchema } from './util/user.validation.schema';
 import { paginationSchema } from 'src/utils/api.util';
+import { Roles } from 'src/decorators/roles.decorator';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @Roles(['ADMIN'])
   findAll(
     @Query(new ZodValidationPipe(paginationSchema))
     query: PaginationQueryType,

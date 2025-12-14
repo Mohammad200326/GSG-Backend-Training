@@ -45,13 +45,13 @@ export class ProductController {
     return this.productService.create(createProductDto, request.user, file);
   }
 
-  @Roles(['MERCHANT', 'CUSTOMER'])
+  @Roles(['MERCHANT', 'CUSTOMER', 'ADMIN'])
   @Get()
   findAll(@Query(new ZodValidationPipe(productSchema)) query: ProductQuery) {
     return this.productService.findAll(query);
   }
 
-  @Roles(['MERCHANT', 'CUSTOMER'])
+  @Roles(['MERCHANT', 'CUSTOMER', 'ADMIN'])
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.productService.findOne(id);

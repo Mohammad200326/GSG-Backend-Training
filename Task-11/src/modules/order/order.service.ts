@@ -71,6 +71,31 @@ export class OrderService {
     return createdOrder;
   }
 
+  findAllForAdmin(query: PaginationQueryType) {
+    return this.prismaService.$transaction(async (prisma) => {
+      const pagination = this.prismaService.handleQueryPagination(query);
+
+      const orders = await prisma.order.findMany({
+        ...removeFields(pagination, ['page']),
+        include: {
+          orderProducts: true,
+          orderReturns: true,
+          transactions: true,
+        },
+      });
+
+      const count = await prisma.order.count();
+      return {
+        data: orders,
+        ...this.prismaService.formatPaginationResponse({
+          page: pagination.page,
+          count,
+          limit: pagination.take,
+        }),
+      };
+    });
+  }
+
   findAll(
     userId: bigint,
     query: PaginationQueryType,
