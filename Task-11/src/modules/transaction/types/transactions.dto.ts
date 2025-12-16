@@ -10,7 +10,12 @@ export type UpdateTransactionDto = { orderReturnId: number };
 
 export type TransactionResponseDTO = Prisma.UserTransactionGetPayload<{
   include: {
-    user: true;
+    user: {
+      select: {
+        name: true;
+        email: true;
+      };
+    };
     order: true;
     orderReturn: true;
   };

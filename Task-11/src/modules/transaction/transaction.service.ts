@@ -20,6 +20,16 @@ export class TransactionService {
     };
     return this.prismaService.userTransaction.create({
       data: dataPayload,
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+        order: true,
+        orderReturn: true,
+      },
     });
   }
 
@@ -32,7 +42,12 @@ export class TransactionService {
         ...removeFields(pagination, ['page']),
 
         include: {
-          user: true,
+          user: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
           order: true,
           orderReturn: true,
         },
@@ -54,6 +69,16 @@ export class TransactionService {
   findOne(id: number) {
     return this.prismaService.userTransaction.findUnique({
       where: { id },
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+        order: true,
+        orderReturn: true,
+      },
     });
   }
 
@@ -67,7 +92,12 @@ export class TransactionService {
         ...removeFields(pagination, ['page']),
         where: { userId: Number(user!.id) },
         include: {
-          user: true,
+          user: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
           order: true,
           orderReturn: true,
         },
@@ -91,6 +121,16 @@ export class TransactionService {
   findByOrderId(orderId: number) {
     return this.prismaService.userTransaction.findMany({
       where: { orderId },
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+        order: true,
+        orderReturn: true,
+      },
     });
   }
 }
