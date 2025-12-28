@@ -12,12 +12,11 @@ class AuthService {
   private _userService = userService;
 
   async register(payload: RegisterDTO): Promise<RegisterDTOResponse> {
-    const hashedValue = await createArgonHash(payload.password);
+    const hashedPassword = await createArgonHash(payload.password);
 
     return this._userService.createStudent({
-      email: payload.email,
-      name: payload.name,
-      password: hashedValue,
+      ...payload,
+      password: hashedPassword,
     });
   }
   async createCoachByAdmin(payload: CreateUserDTO) {
@@ -30,7 +29,7 @@ class AuthService {
   }
 
   async login(payload: LoginDTO): Promise<LoginDTOResponse | null> {
-    const foundUser = this._userService.findUserByEmail(payload.email);
+    const foundUser = await this._userService.findUserByEmail(payload.email);
     if (!foundUser) return null;
     const isPasswordMatch = await verifyArgonHash(
       payload.password,

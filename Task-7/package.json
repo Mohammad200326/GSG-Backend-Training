@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@faker-js/faker": "^9.9.0",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.0.0",
@@ -24,6 +25,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.19.2",
     "multer": "^2.0.2",
     "zod": "^4.1.12"
   }

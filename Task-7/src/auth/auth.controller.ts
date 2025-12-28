@@ -10,7 +10,6 @@ import {
 import { loginDTOSchema, registerDTOSchema } from "./util/auth.schema";
 import { signJWT } from "./util/jwt.util";
 import { HTTPErrorStatus } from "../utils/util.types";
-import { CustomError, handleError } from "../utils/exception";
 
 class AuthController {
   private service = authService;
@@ -27,7 +26,7 @@ class AuthController {
       res.create(user);
     } catch (error) {
       res.error({
-        message: "Filed To Create Student",
+        message: "Failed To Create Student",
         statusCode: HTTPErrorStatus.InternalServerError,
       });
     }
